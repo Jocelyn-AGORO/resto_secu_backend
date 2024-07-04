@@ -1,0 +1,51 @@
+Création de compte client: Envoyez une requête POST à 
+    http://localhost:3000/clients
+
+Création de compte client non sécurisée: Envoyez une requête POST à 
+    http://localhost:3000/clients/unsafe
+
+    Vulnérabilité: Le mot de passe client est stocké en claires
+
+
+Connexion sécurisée: Envoyez une requête POST à 
+    http://localhost:3000/clients/login
+
+    avec le corps JSON contenant l'email et le mot de passe.
+
+Connexion non sécurisée: Envoyez une requête POST à 
+    http://localhost:3000/clients/loginUnsafe 
+
+    avec le corps JSON contenant l'email et le mot de passe vulnérable aux injections permettant 
+    de contourner l'authentification et de se connecter sans les informations d'identification correctes.
+        {
+            "email": "' OR '1'='1",
+            "motDePasse": "' OR '1'='1"
+        }
+
+
+Recherche de restaurants sécurisée: Envoyez une requête GET à 
+    http://localhost:3000/restaurants/search?nom=restaurant_name
+
+Recherche de restaurants non sécurisée: Envoyez une requête GET à 
+    http://localhost:3000/restaurants/searchUnsafe?nom=restaurant_name
+
+    Vulnérabilité : Injection SQL
+        /restaurants/searchUnsafe?nom=%'; DROP TABLE Restaurants; --
+
+
+Réservation de table sécurisée: Envoyez une requête POST à 
+    http://localhost:3000/reservations 
+    
+    avec le corps JSON contenant les informations de réservation et un header d'Authorization avec le token JWT.
+
+Réservation de table non sécurisée: Envoyez une requête POST à 
+    http://localhost:3000/reservationsUnsafe 
+
+    Vulnérabilité : Injection SQL:
+        {
+            "date_reservation": "2023-01-01",
+            "heure": "12:00:00",
+            "nbr_personnes": 2,
+            "id_client": 1,
+            "id_table": "1); DROP TABLE Reservations; --"
+        }
