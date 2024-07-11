@@ -6,6 +6,18 @@ const Restaurant = function(restaurant) {
     this.telephone = restaurant.telephone;
 };
 
+Restaurant.findAll = (result) => {
+    db.query("SELECT * FROM Restaurants", (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    });
+};
+
+
 Restaurant.findByName = (name, result) => {
     db.query(`SELECT * FROM Restaurants WHERE nom LIKE ?`, [`%${name}%`], (err, res) => {
         if (err) {
@@ -16,5 +28,6 @@ Restaurant.findByName = (name, result) => {
         result(null, res);
     });
 };
+
 
 module.exports = Restaurant;

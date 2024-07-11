@@ -1,6 +1,18 @@
 const Restaurant = require('../models/restaurant');
 const db = require('../config/db.config');
 
+exports.restaurants = (req, res) => {
+    Restaurant.findAll((err, data) => {
+        if (err) {
+            return res.status(500).send({
+                message: err.message || "Some error occurred while retrieving the restaurants."
+            });
+        }
+        res.send(data);
+    });
+};
+
+
 exports.search = (req, res) => {
     if (!req.query.nom) {
         return res.status(400).send({

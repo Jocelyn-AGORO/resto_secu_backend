@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Structure de la table `clients`
 --
 
-CREATE TABLE `clients` (
+CREATE TABLE IF NOT EXISTS `clients` (
   `id_client` int(11) NOT NULL,
   `nom` varchar(50) DEFAULT NULL,
   `prenom` varchar(50) DEFAULT NULL,
@@ -60,7 +60,7 @@ INSERT INTO `clients` (`id_client`, `nom`, `prenom`, `email`, `motDePasse`, `tel
 -- Structure de la table `reservations`
 --
 
-CREATE TABLE `reservations` (
+CREATE TABLE IF NOT EXISTS `reservations` (
   `id_reservation` int(11) NOT NULL,
   `date_reservation` date DEFAULT NULL,
   `heure` time DEFAULT NULL,
@@ -86,7 +86,7 @@ INSERT INTO `reservations` (`id_reservation`, `date_reservation`, `heure`, `nbr_
 -- Structure de la table `restaurants`
 --
 
-CREATE TABLE `restaurants` (
+CREATE TABLE IF NOT EXISTS `restaurants` (
   `id_restaurant` int(11) NOT NULL,
   `nom` varchar(50) DEFAULT NULL,
   `adresse` varchar(100) DEFAULT NULL,
@@ -110,7 +110,7 @@ INSERT INTO `restaurants` (`id_restaurant`, `nom`, `adresse`, `telephone`) VALUE
 -- Structure de la table `tablerestaurants`
 --
 
-CREATE TABLE `tablerestaurants` (
+CREATE TABLE IF NOT EXISTS `tablerestaurants` (
   `id_table` int(11) NOT NULL,
   `numero` int(11) DEFAULT NULL,
   `nbr_places` int(11) DEFAULT NULL,
