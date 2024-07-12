@@ -37,7 +37,7 @@ exports.createUnsafe = (req, res) => {
 
     const query = `INSERT INTO Clients (nom, prenom, email, motDePasse, telephone) VALUES ('${req.body.nom}', '${req.body.prenom}', '${req.body.email}', '${req.body.motDePasse}', '${req.body.telephone}')`;
 
-    db.query(query, (err, result) => {  // Renommer res en result pour éviter les conflits
+    db.run(query, (err, result) => {  // Renommer res en result pour éviter les conflits
         if (err) {
             console.log("error: ", err);
             return res.status(500).send({
@@ -104,15 +104,15 @@ exports.loginUnsafe = (req, res) => {
             message: "Email and password can not be empty!"
         });
     }
-
-    db.query(`SELECT * FROM Clients WHERE email = '${req.body.email}' AND motDePasse = '${req.body.motDePasse}'`, (err, data) => {
+    const sql = `SELECT * FROM clients WHERE email = ? AND motDePasse = ?`;
+    db.get(sql,[req.body.email, req.body.motDePasse], (err, row) => {
         if (err) {
             return res.status(500).send({
                 message: "Error retrieving Client with email " + req.body.email
             });
         }
-        if (data.length) {
-            res.send({ message: "Login successful", client: data[0] });
+        if (row) {
+            res.send({ message: "Login successful", client: row });
         } else {
             res.status(401).send({ message: "Invalid email or password" });
         }

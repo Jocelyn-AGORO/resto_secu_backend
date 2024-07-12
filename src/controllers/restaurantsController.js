@@ -36,8 +36,9 @@ exports.searchUnsafe = (req, res) => {
             message: "Nom can not be empty!"
         });
     }
+    const sql = `SELECT * FROM Restaurants WHERE nom LIKE ? `;
 
-    db.query(`SELECT * FROM Restaurants WHERE nom LIKE '%${req.query.nom}%'`, (err, data) => {
+    db.all(sql, [`%${req.query.nom}%`],(err, data) => {
         if (err) {
             return res.status(500).send({
                 message: "Some error occurred while searching for the restaurant."
