@@ -1,18 +1,15 @@
-const mysql = require('mysql');
-
-// Charge les variables d'environnement
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 require('dotenv').config();
 
-const dbConn = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+const dbPath =   path.resolve(__dirname, '../../restaurants.db');
+
+const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE,(err) => {
+  if (err) {
+    console.error('Error de connexion à la base de données : ', err.message);
+  } else {
+    console.log('Connecté à la base de données SQLite avec succès.');
+  }
 });
 
-dbConn.connect(function(error) {
-  if (error) throw error;
-  console.log("Connecté à la base de données MySQL!");
-});
-
-module.exports = dbConn;
+module.exports = db;

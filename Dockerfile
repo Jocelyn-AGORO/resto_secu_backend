@@ -1,6 +1,9 @@
 # Use an official Node.js runtime as the base image
 FROM node:20-alpine
 
+# Install sqlite3
+RUN apk add --no-cache sqlite
+
 # Set the working directory
 WORKDIR /usr/src/app
 

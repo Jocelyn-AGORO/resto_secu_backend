@@ -11,25 +11,30 @@ const Client = function(client) {
 };
 
 Client.create = (newClient, result) => {
-    db.query("INSERT INTO Clients SET ?", newClient, (err, res) => {
+    const sql = "INSERT INTO clients (nom, prenom, email, motDePasse, telephone) VALUES (?, ?, ?, ?, ?)";
+    const params = [newClient.nom, newClient.prenom, newClient.email, newClient.motDePasse, newClient.telephone];
+
+    db.run(sql, params, function(err) {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        result(null, { id: res.insertId, ...newClient });
+        result(null, { id: this.lastID, ...newClient });
     });
 };
 
 Client.findById = (clientId, result) => {
-    db.query(`SELECT * FROM Clients WHERE id_client = ${clientId}`, (err, res) => {
+    const sql = "SELECT * FROM clients WHERE id_client = ?";
+
+    db.get(sql, [clientId], (err, row) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        if (res.length) {
-            result(null, res[0]);
+        if (row) {
+            result(null, row);
             return;
         }
         result({ kind: "not_found" }, null);
@@ -37,14 +42,16 @@ Client.findById = (clientId, result) => {
 };
 
 Client.findByEmail = (email, result) => {
-    db.query(`SELECT * FROM Clients WHERE email = ?`, [email], (err, res) => {
+    const sql = "SELECT * FROM clients WHERE email = ?";
+
+    db.get(sql, [email], (err, row) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        if (res.length) {
-            result(null, res[0]);
+        if (row) {
+            result(null, row);
             return;
         }
         result({ kind: "not_found" }, null);

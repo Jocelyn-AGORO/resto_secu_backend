@@ -7,27 +7,29 @@ const Restaurant = function(restaurant) {
 };
 
 Restaurant.findAll = (result) => {
-    db.query("SELECT * FROM Restaurants", (err, res) => {
+    const sql = "SELECT * FROM restaurants";
+
+    db.all(sql, [], (err, rows) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        result(null, res);
+        result(null, rows);
     });
 };
-
 
 Restaurant.findByName = (name, result) => {
-    db.query(`SELECT * FROM Restaurants WHERE nom LIKE ?`, [`%${name}%`], (err, res) => {
+    const sql = "SELECT * FROM restaurants WHERE nom LIKE ?";
+
+    db.all(sql, [`%${name}%`], (err, rows) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        result(null, res);
+        result(null, rows);
     });
 };
-
 
 module.exports = Restaurant;

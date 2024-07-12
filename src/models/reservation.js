@@ -9,13 +9,23 @@ const Reservation = function(reservation) {
 };
 
 Reservation.create = (newReservation, result) => {
-    db.query("INSERT INTO Reservations SET ?", newReservation, (err, res) => {
+    const sql = `INSERT INTO reservations (date_reservation, heure, nbr_personnes, id_client, id_table) 
+                 VALUES (?, ?, ?, ?, ?)`;
+    const params = [
+        newReservation.date_reservation,
+        newReservation.heure,
+        newReservation.nbr_personnes,
+        newReservation.id_client,
+        newReservation.id_table
+    ];
+
+    db.run(sql, params, function(err) {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        result(null, { id: res.insertId, ...newReservation });
+        result(null, { id: this.lastID, ...newReservation });
     });
 };
 
